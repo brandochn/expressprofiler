@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography.cs" />
     <Compile Include="ListViewExtensions.cs" />
     <Compile Include="RecentConnection.cs" />
     <Compile Include="RecentConnectionsForm.cs">

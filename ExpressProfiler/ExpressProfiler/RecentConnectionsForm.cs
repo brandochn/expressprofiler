@@ -32,7 +32,7 @@ namespace ExpressProfiler
         {
             if (_recentConnection?.Connections != null)
             {
-                _recentConnection.Connections.ForEach(c=>c.CreationDate = DateTime.Parse(c.CreationDate).ToLocalTime().ToString());
+                _recentConnection.Connections.ForEach(c => c.CreationDate = string.IsNullOrEmpty(c.CreationDate) ? string.Empty : DateTime.Parse(c.CreationDate).ToLocalTime().ToString());
             }
         }
 
@@ -69,8 +69,8 @@ namespace ExpressProfiler
                 if (currentRow != null)
                 {
                     _mainForm.recent_servername = currentRow.DataSource;
-                    _mainForm.recent__username = currentRow.UserId;
-                    _mainForm.recent_userpassword = currentRow.Password;
+                    _mainForm.recent__username = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? currentRow.UserId : string.Empty;
+                    _mainForm.recent_userpassword = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? Cryptography.Decrypt(currentRow.Password) : string.Empty;
                     _mainForm.recent_auth = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? 1 : 0;
                     this.Close();
                 }

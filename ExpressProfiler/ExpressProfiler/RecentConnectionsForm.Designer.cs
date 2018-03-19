@@ -117,10 +117,10 @@
             // creationDateDataGridViewTextBoxColumn
             // 
             this.creationDateDataGridViewTextBoxColumn.DataPropertyName = "CreationDate";
-            this.creationDateDataGridViewTextBoxColumn.HeaderText = "CreationDate";
+            this.creationDateDataGridViewTextBoxColumn.HeaderText = "Creation Date";
             this.creationDateDataGridViewTextBoxColumn.Name = "creationDateDataGridViewTextBoxColumn";
             this.creationDateDataGridViewTextBoxColumn.ReadOnly = true;
-            this.creationDateDataGridViewTextBoxColumn.Width = 94;
+            this.creationDateDataGridViewTextBoxColumn.Width = 97;
             // 
             // catalogDataGridViewTextBoxColumn
             // 
@@ -129,6 +129,7 @@
             this.catalogDataGridViewTextBoxColumn.Name = "catalogDataGridViewTextBoxColumn";
             this.catalogDataGridViewTextBoxColumn.ReadOnly = true;
             this.catalogDataGridViewTextBoxColumn.Visible = false;
+            this.catalogDataGridViewTextBoxColumn.Width = 68;
             // 
             // applicationNameDataGridViewTextBoxColumn
             // 
@@ -137,6 +138,7 @@
             this.applicationNameDataGridViewTextBoxColumn.Name = "applicationNameDataGridViewTextBoxColumn";
             this.applicationNameDataGridViewTextBoxColumn.ReadOnly = true;
             this.applicationNameDataGridViewTextBoxColumn.Visible = false;
+            this.applicationNameDataGridViewTextBoxColumn.Width = 112;
             // 
             // integratedSecurityDataGridViewTextBoxColumn
             // 
@@ -145,6 +147,7 @@
             this.integratedSecurityDataGridViewTextBoxColumn.Name = "integratedSecurityDataGridViewTextBoxColumn";
             this.integratedSecurityDataGridViewTextBoxColumn.ReadOnly = true;
             this.integratedSecurityDataGridViewTextBoxColumn.Visible = false;
+            this.integratedSecurityDataGridViewTextBoxColumn.Width = 118;
             // 
             // RecentConnectionsForm
             // 

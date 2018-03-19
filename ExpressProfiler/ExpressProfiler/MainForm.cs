@@ -22,7 +22,7 @@ namespace ExpressProfiler
 {
     public partial class MainForm : Form
     {
-        internal const string versionString = "Express Profiler v2.2";
+        internal const string versionString = "Express Profiler v2.3";
         internal  readonly string recentConnectionFolderPath = Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "Express Profiler");
 
         private class PerfInfo
@@ -299,6 +299,8 @@ namespace ExpressProfiler
             tbAuth.Enabled = m_ProfilingState == ProfilingStateEnum.psStopped;
             edUser.Enabled = edServer.Enabled&&(tbAuth.SelectedIndex==1);
             edPassword.Enabled = edServer.Enabled && (tbAuth.SelectedIndex == 1);
+            edUser.Text =  (tbAuth.SelectedIndex == 0) ? string.Empty : edUser.Text;
+            edPassword.Text = (tbAuth.SelectedIndex == 0) ? string.Empty : edPassword.Text;
         }
 
 
@@ -1726,7 +1728,7 @@ namespace ExpressProfiler
             currentConnection.CreationDate = DateTime.UtcNow.ToString();
             currentConnection.DataSource = edServer.Text?.Trim();
             currentConnection.IntegratedSecurity = tbAuth.SelectedIndex == 0 ? "SSPI" : string.Empty;
-            currentConnection.Password = edPassword.Text?.Trim();
+            currentConnection.Password = string.IsNullOrEmpty(edPassword.Text?.Trim()) ? string.Empty: Cryptography.Encrypt(edPassword.Text.Trim());
             currentConnection.UserId = edUser.Text?.Trim();
 
             recentConnections.Add(currentConnection);
