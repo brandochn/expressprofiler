@@ -15,13 +15,15 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using ExpressProfiler.EventComparers;
-
+using static System.Environment;
+using System.Linq;
 
 namespace ExpressProfiler
 {
     public partial class MainForm : Form
     {
         internal const string versionString = "Express Profiler v2.2";
+        internal  readonly string recentConnectionFolderPath = Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "Express Profiler");
 
         private class PerfInfo
         {
@@ -70,6 +72,12 @@ namespace ExpressProfiler
         private readonly List<PerfColumn> m_columns = new List<PerfColumn>();
         internal bool matchCase = false;
         internal bool wholeWord = false;
+        internal string recent_servername = string.Empty;
+        internal string recent__username = string.Empty;
+        internal string recent_userpassword = string.Empty;
+        internal int recent_auth = 0;
+
+
 
         public MainForm()
         {
@@ -809,6 +817,7 @@ namespace ExpressProfiler
             m_ProfilingState = ProfilingStateEnum.psStopped;
             NewEventArrived(m_EventStopped,true);
             UpdateButtons();
+            SaveRecentConnection();
         }
 
         private void listView1_ItemSelectionChanged_1(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -1702,6 +1711,82 @@ namespace ExpressProfiler
 				ClearFilterEvents();
 			}
 		}
+
+        private void SaveRecentConnection()
+        {
+            var recentConnections = ReadRecentConnections();
+
+            if (recentConnections?.Connections == null)
+                recentConnections = new RecentConnection() { Connections = new List<Connection>() };
+
+            var currentConnection = new Connection();
+
+            currentConnection.ApplicationName = "Express Profiler";
+            currentConnection.Catalog = "master";
+            currentConnection.CreationDate = DateTime.UtcNow.ToString();
+            currentConnection.DataSource = edServer.Text?.Trim();
+            currentConnection.IntegratedSecurity = tbAuth.SelectedIndex == 0 ? "SSPI" : string.Empty;
+            currentConnection.Password = edPassword.Text?.Trim();
+            currentConnection.UserId = edUser.Text?.Trim();
+
+            recentConnections.Add(currentConnection);
+
+            try
+            {
+                var serialize = XmlHelper.SerializeXml(recentConnections);
+                XmlHelper.WriteXml(recentConnectionFolderPath, "RecentConnections.xml", serialize);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void selectConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoSearchConnection();
+        }
+
+        public RecentConnection ReadRecentConnections()
+        {
+            string recentConnectionsFile = null;
+            if (!System.IO.Directory.Exists(recentConnectionFolderPath))
+                System.IO.Directory.CreateDirectory(recentConnectionFolderPath);
+
+            recentConnectionsFile = Path.Combine(recentConnectionFolderPath, "RecentConnections.xml");
+
+            if (!System.IO.File.Exists(recentConnectionsFile))
+                return null;
+
+            RecentConnection recentConnection = null;
+            try
+            {
+                recentConnection = XmlHelper.DeserializeXml<RecentConnection>(TextFileHelper.ReadAllText(recentConnectionsFile));
+            }
+            catch { }
+
+            return recentConnection;
+        }
+
+        private void DoSearchConnection()
+        {
+            if (m_ProfilingState == ProfilingStateEnum.psProfiling)
+            {
+                MessageBox.Show("You cannot search a recent connection when trace is running", "ExpressProfiler", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
+            using (RecentConnectionsForm form = new RecentConnectionsForm(this))
+            {
+                form.TopMost = this.TopMost;
+                form.ShowDialog();
+
+                edServer.Text = recent_servername;
+                edUser.Text = recent__username;
+                edPassword.Text = recent_userpassword;
+                tbAuth.SelectedIndex = recent_auth;
+            }
+        }
 
     }
 }

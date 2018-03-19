@@ -94,6 +94,8 @@
             this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filterCapturedEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCapturedFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -398,7 +400,8 @@
             this.editToolStripMenuItem,
             this.mnAbout,
             this.viewToolStripMenuItem,
-            this.filterToolStripMenuItem});
+            this.filterToolStripMenuItem,
+            this.recentToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(979, 24);
@@ -646,6 +649,21 @@
             this.clearCapturedFiltersToolStripMenuItem.Text = "Clear Captured Filters";
             this.clearCapturedFiltersToolStripMenuItem.Click += new System.EventHandler(this.clearCapturedFiltersToolStripMenuItem_Click);
             // 
+            // recentToolStripMenuItem
+            // 
+            this.recentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectConnectionToolStripMenuItem});
+            this.recentToolStripMenuItem.Name = "recentToolStripMenuItem";
+            this.recentToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.recentToolStripMenuItem.Text = "Recent";
+            // 
+            // selectConnectionToolStripMenuItem
+            // 
+            this.selectConnectionToolStripMenuItem.Name = "selectConnectionToolStripMenuItem";
+            this.selectConnectionToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.selectConnectionToolStripMenuItem.Text = "Select Connection";
+            this.selectConnectionToolStripMenuItem.Click += new System.EventHandler(this.selectConnectionToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -741,6 +759,8 @@
 		private System.Windows.Forms.ToolStripMenuItem saveAllEventsToExcelXmlFileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
 		private System.Windows.Forms.ToolStripButton tbFilterEvents;
+        private System.Windows.Forms.ToolStripMenuItem recentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectConnectionToolStripMenuItem;
     }
 }
 
