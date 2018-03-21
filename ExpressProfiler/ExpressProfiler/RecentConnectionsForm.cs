@@ -44,8 +44,8 @@ namespace ExpressProfiler
             {
                 foreach (var iter in _recentConnection.Connections)
                 {
-                    if (iter.DataSource.IndexOf(searchTerm) != -1 ||
-                        iter.UserId.IndexOf(searchTerm) != -1)
+                    if (iter.DataSource.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) != -1 ||
+                        iter.UserId.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) != -1)
                     {
                         items.Add(iter);
                     }
@@ -56,8 +56,24 @@ namespace ExpressProfiler
 
         private void ConnectEvents()
         {
-            txtSearch.KeyPress += TxtSearch_KeyPress;
-            dgvConnections.DoubleClick += DgvConnections_DoubleClick;
+            txtSearch.KeyUp += TxtSearch_KeyUp;
+            dgvConnections.DoubleClick += DgvConnections_DoubleClick;           
+        }
+
+        private void TxtSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (string.IsNullOrEmpty(txtSearch.Text.Trim()))
+                    return;
+
+                connectionBindingSource.DataSource = SearchConnection(txtSearch.Text);
+            }
+
+            if ((e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete) && txtSearch.Text.Length == 0)
+            {
+                LoadConnections();
+            }
         }
 
         private void DgvConnections_DoubleClick(object sender, System.EventArgs e)
@@ -75,15 +91,6 @@ namespace ExpressProfiler
                     this.Close();
                 }
             }
-        }
-
-        private void TxtSearch_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-                connectionBindingSource.DataSource = SearchConnection(txtSearch.Text);
-
-            if (txtSearch.Text.Length == 0)
-                LoadConnections();
         }
     }
 }
