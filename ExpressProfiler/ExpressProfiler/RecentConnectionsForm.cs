@@ -62,7 +62,7 @@ namespace ExpressProfiler
 
         private void TxtSearch_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter || txtSearch.Text.Length > 3)
             {
                 if (string.IsNullOrEmpty(txtSearch.Text.Trim()))
                     return;

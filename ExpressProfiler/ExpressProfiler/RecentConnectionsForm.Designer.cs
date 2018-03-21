@@ -32,7 +32,6 @@
             this.lblSearch = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.dgvConnections = new System.Windows.Forms.DataGridView();
-            this.connectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSourceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,6 +39,7 @@
             this.catalogDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.applicationNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.integratedSecurityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.connectionBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvConnections)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connectionBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -83,12 +83,8 @@
             this.dgvConnections.Name = "dgvConnections";
             this.dgvConnections.ReadOnly = true;
             this.dgvConnections.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvConnections.Size = new System.Drawing.Size(759, 264);
+            this.dgvConnections.Size = new System.Drawing.Size(759, 314);
             this.dgvConnections.TabIndex = 2;
-            // 
-            // connectionBindingSource
-            // 
-            this.connectionBindingSource.DataSource = typeof(ExpressProfiler.Connection);
             // 
             // dataSourceDataGridViewTextBoxColumn
             // 
@@ -149,15 +145,21 @@
             this.integratedSecurityDataGridViewTextBoxColumn.Visible = false;
             this.integratedSecurityDataGridViewTextBoxColumn.Width = 118;
             // 
+            // connectionBindingSource
+            // 
+            this.connectionBindingSource.DataSource = typeof(ExpressProfiler.Connection);
+            // 
             // RecentConnectionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 362);
+            this.ClientSize = new System.Drawing.Size(784, 412);
             this.Controls.Add(this.dgvConnections);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.lblSearch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "RecentConnectionsForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -24,6 +24,7 @@ namespace ExpressProfiler
     {
         internal const string versionString = "Express Profiler v2.3";
         internal  readonly string recentConnectionFolderPath = Path.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), "Express Profiler");
+        internal readonly string recentConnectionFileName = "RecentConnections.xml";
 
         private class PerfInfo
         {
@@ -1736,7 +1737,7 @@ namespace ExpressProfiler
             try
             {
                 var serialize = XmlHelper.SerializeXml(recentConnections);
-                XmlHelper.WriteXml(recentConnectionFolderPath, "RecentConnections.xml", serialize);
+                XmlHelper.WriteXml(recentConnectionFolderPath, recentConnectionFileName, serialize);
             }
             catch (Exception e)
             {
@@ -1755,7 +1756,7 @@ namespace ExpressProfiler
             if (!System.IO.Directory.Exists(recentConnectionFolderPath))
                 System.IO.Directory.CreateDirectory(recentConnectionFolderPath);
 
-            recentConnectionsFile = Path.Combine(recentConnectionFolderPath, "RecentConnections.xml");
+            recentConnectionsFile = Path.Combine(recentConnectionFolderPath, recentConnectionFileName);
 
             if (!System.IO.File.Exists(recentConnectionsFile))
                 return null;
@@ -1778,15 +1779,22 @@ namespace ExpressProfiler
                                 MessageBoxIcon.Information);
                 return;
             }
-            using (RecentConnectionsForm form = new RecentConnectionsForm(this))
+            try
             {
-                form.TopMost = this.TopMost;
-                form.ShowDialog();
+                using (RecentConnectionsForm form = new RecentConnectionsForm(this))
+                {
+                    form.TopMost = this.TopMost;
+                    form.ShowDialog();
 
-                edServer.Text = recent_servername;
-                edUser.Text = recent__username;
-                edPassword.Text = recent_userpassword;
-                tbAuth.SelectedIndex = recent_auth;
+                    edServer.Text = recent_servername;
+                    edUser.Text = recent__username;
+                    edPassword.Text = recent_userpassword;
+                    tbAuth.SelectedIndex = recent_auth;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
