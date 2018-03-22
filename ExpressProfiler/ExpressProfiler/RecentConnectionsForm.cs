@@ -9,11 +9,7 @@ namespace ExpressProfiler
         private MainForm _mainForm = null;
         private RecentConnection _recentConnection = null;
 
-        private RecentConnectionsForm()
-        {
-            InitializeComponent();
-            ConnectEvents();
-        }
+        private bool connectionSelected = false;
 
         public RecentConnectionsForm(MainForm form) : this()
         {
@@ -21,11 +17,28 @@ namespace ExpressProfiler
             LoadConnections();
         }
 
-        private void LoadConnections()
+        private RecentConnectionsForm()
         {
-            _recentConnection = _mainForm.ReadRecentConnections();
-            ConvertUTCDateToLocalTime();
-            connectionBindingSource.DataSource = _recentConnection?.Connections;
+            InitializeComponent();
+            ConnectEvents();
+        }
+
+        public bool ConnectionSelected
+        {
+            get
+            {
+                return connectionSelected;
+            }
+
+            set
+            {
+                connectionSelected = value;
+            }
+        }
+        private void ConnectEvents()
+        {
+            txtSearch.KeyUp += TxtSearch_KeyUp;
+            dgvConnections.DoubleClick += DgvConnections_DoubleClick;
         }
 
         private void ConvertUTCDateToLocalTime()
@@ -36,6 +49,34 @@ namespace ExpressProfiler
             }
         }
 
+        private void DgvConnections_DoubleClick(object sender, System.EventArgs e)
+        {
+            var dataGridView = sender as DataGridView;
+            if (dataGridView != null)
+            {
+                var currentRow = dataGridView.CurrentRow.DataBoundItem as Connection;
+                if (currentRow != null)
+                {
+                    _mainForm.recent_servername = currentRow.DataSource;
+                    _mainForm.recent__username = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? currentRow.UserId : string.Empty;
+                    _mainForm.recent_userpassword = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? Cryptography.Decrypt(currentRow.Password) : string.Empty;
+                    _mainForm.recent_auth = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? 1 : 0;
+                    ConnectionSelected = true;
+                    this.Close();
+                }
+                else
+                {
+                    ConnectionSelected = false;
+                }
+            }
+        }
+
+        private void LoadConnections()
+        {
+            _recentConnection = _mainForm.ReadRecentConnections();
+            ConvertUTCDateToLocalTime();
+            connectionBindingSource.DataSource = _recentConnection?.Connections;
+        }
         private List<Connection> SearchConnection(string searchTerm)
         {
             List<Connection> items = new List<Connection>();
@@ -53,13 +94,6 @@ namespace ExpressProfiler
             }
             return items;
         }
-
-        private void ConnectEvents()
-        {
-            txtSearch.KeyUp += TxtSearch_KeyUp;
-            dgvConnections.DoubleClick += DgvConnections_DoubleClick;           
-        }
-
         private void TxtSearch_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || txtSearch.Text.Length > 3)
@@ -73,23 +107,6 @@ namespace ExpressProfiler
             if ((e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete) && txtSearch.Text.Length == 0)
             {
                 LoadConnections();
-            }
-        }
-
-        private void DgvConnections_DoubleClick(object sender, System.EventArgs e)
-        {
-            var dataGridView = sender as DataGridView;
-            if (dataGridView != null)
-            {
-                var currentRow = dataGridView.CurrentRow.DataBoundItem as Connection;
-                if (currentRow != null)
-                {
-                    _mainForm.recent_servername = currentRow.DataSource;
-                    _mainForm.recent__username = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? currentRow.UserId : string.Empty;
-                    _mainForm.recent_userpassword = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? Cryptography.Decrypt(currentRow.Password) : string.Empty;
-                    _mainForm.recent_auth = string.IsNullOrEmpty(currentRow.IntegratedSecurity) ? 1 : 0;
-                    this.Close();
-                }
             }
         }
     }

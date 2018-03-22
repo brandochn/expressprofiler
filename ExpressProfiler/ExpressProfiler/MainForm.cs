@@ -1786,10 +1786,13 @@ namespace ExpressProfiler
                     form.TopMost = this.TopMost;
                     form.ShowDialog();
 
-                    edServer.Text = recent_servername;
-                    edUser.Text = recent__username;
-                    edPassword.Text = recent_userpassword;
-                    tbAuth.SelectedIndex = recent_auth;
+                    if (form.ConnectionSelected)
+                    {
+                        edServer.Text = recent_servername;
+                        edUser.Text = recent__username;
+                        edPassword.Text = recent_userpassword;
+                        tbAuth.SelectedIndex = recent_auth;
+                    }
                 }
             }
             catch (Exception e)
